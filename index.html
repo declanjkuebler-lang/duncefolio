@@ -1,0 +1,2402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Declan Kuebler — Industrial Designer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+/* ============================================
+   CSS VARIABLES & RESET
+   ============================================ */
+:root {
+  --black: #0a0a0a;
+  --off-black: #111111;
+  --dark: #1a1a1a;
+  --mid: #2a2a2a;
+  --grey-dark: #3a3a3a;
+  --grey: #666666;
+  --grey-light: #999999;
+  --off-white: #e8e8e8;
+  --white: #f5f5f5;
+  --pure: #ffffff;
+  --orange: #FF5C00;
+  --orange-dim: #cc4900;
+  --font-display: 'Bebas Neue', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+  --font-mono: 'DM Mono', monospace;
+  --nav-h: 64px;
+  --ease: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; font-size: 16px; }
+
+body {
+  background: var(--black);
+  color: var(--off-white);
+  font-family: var(--font-body);
+  font-weight: 300;
+  line-height: 1.6;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+a { color: inherit; text-decoration: none; }
+img { display: block; width: 100%; object-fit: cover; }
+button { cursor: none; border: none; background: none; font-family: inherit; }
+
+/* ============================================
+   CUSTOM CURSOR
+   ============================================ */
+.cursor {
+  position: fixed;
+  width: 8px;
+  height: 8px;
+  background: var(--orange);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: transform 0.1s var(--ease), width 0.3s var(--ease), height 0.3s var(--ease), background 0.3s;
+  mix-blend-mode: normal;
+}
+.cursor-ring {
+  position: fixed;
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(255,92,0,0.5);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9998;
+  transform: translate(-50%, -50%);
+  transition: transform 0.12s var(--ease), width 0.3s var(--ease), height 0.3s var(--ease), border-color 0.3s;
+}
+body.hovering .cursor { width: 14px; height: 14px; }
+body.hovering .cursor-ring { width: 52px; height: 52px; border-color: var(--orange); }
+
+/* ============================================
+   NAVIGATION
+   ============================================ */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: var(--nav-h);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 48px;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  background: rgba(10,10,10,0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  transition: background 0.4s;
+}
+
+.nav-logo {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  letter-spacing: 0.08em;
+  color: var(--white);
+}
+.nav-logo span { color: var(--orange); }
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  list-style: none;
+}
+
+.nav-links a {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--grey-light);
+  transition: color 0.3s;
+  position: relative;
+}
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px; left: 0;
+  width: 0; height: 1px;
+  background: var(--orange);
+  transition: width 0.3s var(--ease);
+}
+.nav-links a:hover, .nav-links a.active { color: var(--white); }
+.nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
+
+.nav-socials {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+.nav-socials a {
+  width: 32px; height: 32px;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid var(--grey-dark);
+  border-radius: 4px;
+  transition: border-color 0.3s, background 0.3s;
+  color: var(--grey-light);
+}
+.nav-socials a:hover { border-color: var(--orange); background: rgba(255,92,0,0.08); color: var(--orange); }
+.nav-socials svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.5; }
+
+/* Hamburger */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: none;
+  padding: 4px;
+}
+.hamburger span {
+  display: block; width: 24px; height: 1px;
+  background: var(--off-white);
+  transition: transform 0.3s, opacity 0.3s;
+}
+
+/* ============================================
+   MOBILE MENU
+   ============================================ */
+.mobile-menu {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: var(--off-black);
+  z-index: 999;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s;
+}
+.mobile-menu.open { opacity: 1; pointer-events: all; }
+.mobile-menu a {
+  font-family: var(--font-display);
+  font-size: 3rem;
+  letter-spacing: 0.06em;
+  color: var(--grey-light);
+  transition: color 0.3s;
+}
+.mobile-menu a:hover { color: var(--orange); }
+
+/* ============================================
+   PAGE SYSTEM
+   ============================================ */
+.page {
+  display: none;
+  min-height: 100vh;
+  padding-top: var(--nav-h);
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.5s var(--ease), transform 0.5s var(--ease);
+}
+.page.active {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ============================================
+   HOME PAGE
+   ============================================ */
+.hero {
+  min-height: calc(100vh - var(--nav-h));
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-left {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 80px 64px;
+  position: relative;
+  z-index: 2;
+}
+
+.hero-label {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 24px;
+}
+
+.hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(5rem, 9vw, 11rem);
+  line-height: 0.92;
+  letter-spacing: 0.02em;
+  color: var(--white);
+  margin-bottom: 40px;
+}
+
+.hero-tagline {
+  font-size: 0.88rem;
+  line-height: 1.8;
+  color: var(--grey-light);
+  max-width: 380px;
+  border-left: 2px solid var(--orange);
+  padding-left: 20px;
+  margin-bottom: 48px;
+}
+
+.hero-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--white);
+  padding: 16px 32px;
+  border: 1px solid var(--grey-dark);
+  transition: border-color 0.3s, background 0.3s;
+  width: fit-content;
+}
+.hero-cta:hover { border-color: var(--orange); background: rgba(255,92,0,0.06); }
+.hero-cta svg { width: 16px; height: 16px; fill: none; stroke: var(--orange); stroke-width: 1.5; }
+
+.hero-right {
+  position: relative;
+  overflow: hidden;
+}
+.hero-right::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,92,0,0.08) 0%, transparent 60%);
+  z-index: 1;
+}
+
+.hero-img-placeholder {
+  width: 100%; height: 100%;
+  background: var(--dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 16px;
+  color: var(--grey);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+}
+.hero-img-placeholder svg { width: 48px; height: 48px; stroke: var(--grey-dark); fill: none; stroke-width: 1; }
+
+.hero-scroll-indicator {
+  position: absolute;
+  bottom: 40px;
+  right: 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--grey);
+  writing-mode: vertical-rl;
+}
+.hero-scroll-line {
+  width: 1px;
+  height: 60px;
+  background: linear-gradient(to bottom, var(--orange), transparent);
+  animation: scrollPulse 2s ease-in-out infinite;
+}
+@keyframes scrollPulse {
+  0%, 100% { opacity: 1; transform: scaleY(1); }
+  50% { opacity: 0.4; transform: scaleY(0.7); }
+}
+
+/* Featured Projects on Home */
+.home-featured {
+  padding: 120px 64px;
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+
+.section-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 64px;
+}
+
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 12px;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.4rem, 4vw, 4rem);
+  letter-spacing: 0.04em;
+  color: var(--white);
+}
+
+.view-all-link {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--grey);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: color 0.3s;
+}
+.view-all-link:hover { color: var(--orange); }
+.view-all-link svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.5; transition: transform 0.3s; }
+.view-all-link:hover svg { transform: translateX(4px); }
+
+.featured-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+}
+
+/* ============================================
+   PROJECT CARDS
+   ============================================ */
+.project-card {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 4/5;
+  background: var(--dark);
+  cursor: none;
+  group: '';
+}
+
+.project-card-img {
+  width: 100%; height: 100%;
+  background: var(--dark);
+  display: flex; align-items: center; justify-content: center;
+  transition: transform 0.7s var(--ease);
+  overflow: hidden;
+}
+.project-card:hover .project-card-img { transform: scale(1.04); }
+
+.project-img-bg {
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column;
+  gap: 12px;
+  color: var(--grey-dark);
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  position: relative;
+}
+
+/* Unique placeholder backgrounds per card */
+.project-img-bg.bg-1 { background: linear-gradient(135deg, #1a1a1a 0%, #2a1a0a 100%); }
+.project-img-bg.bg-2 { background: linear-gradient(135deg, #111 0%, #1a1a2a 100%); }
+.project-img-bg.bg-3 { background: linear-gradient(135deg, #1a1a1a 0%, #0a1a1a 100%); }
+.project-img-bg.bg-4 { background: linear-gradient(135deg, #1a0a0a 0%, #1a1a1a 100%); }
+.project-img-bg.bg-5 { background: linear-gradient(135deg, #0a0a1a 0%, #1a1a1a 100%); }
+.project-img-bg.bg-6 { background: linear-gradient(135deg, #0a1a0a 0%, #1a1a1a 100%); }
+
+.project-img-bg svg { width: 40px; height: 40px; stroke: rgba(255,255,255,0.08); fill: none; stroke-width: 0.8; }
+
+.project-card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.2) 50%, transparent 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 32px;
+  transform: translateY(8px);
+  transition: transform 0.4s var(--ease);
+}
+.project-card:hover .project-card-overlay { transform: translateY(0); }
+
+.project-card-tag {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 8px;
+}
+
+.project-card-title {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  letter-spacing: 0.04em;
+  color: var(--white);
+  margin-bottom: 8px;
+  line-height: 1.1;
+}
+
+.project-card-desc {
+  font-size: 0.78rem;
+  color: var(--grey-light);
+  line-height: 1.6;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.4s var(--ease) 0.05s, transform 0.4s var(--ease) 0.05s;
+}
+.project-card:hover .project-card-desc { opacity: 1; transform: translateY(0); }
+
+.project-card-arrow {
+  position: absolute;
+  top: 24px; right: 24px;
+  width: 36px; height: 36px;
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity 0.3s, transform 0.3s, border-color 0.3s, background 0.3s;
+}
+.project-card-arrow svg { width: 14px; height: 14px; fill: none; stroke: var(--white); stroke-width: 1.5; }
+.project-card:hover .project-card-arrow { opacity: 1; transform: translateY(0); border-color: var(--orange); background: rgba(255,92,0,0.15); }
+
+/* ============================================
+   PROJECTS PAGE
+   ============================================ */
+.page-hero {
+  padding: 100px 64px 64px;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.page-hero-label {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 20px;
+}
+
+.page-hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(4rem, 7vw, 8rem);
+  letter-spacing: 0.03em;
+  line-height: 0.9;
+  color: var(--white);
+  margin-bottom: 32px;
+}
+
+.page-hero-sub {
+  font-size: 0.9rem;
+  color: var(--grey);
+  max-width: 500px;
+  line-height: 1.7;
+}
+
+.projects-grid {
+  padding: 64px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 3px;
+}
+
+/* Large featured card */
+.project-card.large {
+  grid-column: span 2;
+  aspect-ratio: 16/7;
+}
+.project-card.large .project-card-title { font-size: 3rem; }
+
+/* ============================================
+   PROJECT DETAIL PAGE
+   ============================================ */
+#page-project-detail {
+  display: none;
+}
+#page-project-detail.active { display: block; }
+
+.project-detail-hero {
+  height: 70vh;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+}
+
+.project-detail-bg {
+  position: absolute;
+  inset: 0;
+}
+
+.project-detail-content {
+  position: relative;
+  z-index: 2;
+  padding: 80px 64px;
+  background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, transparent 100%);
+  width: 100%;
+}
+
+.project-detail-category {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 16px;
+}
+
+.project-detail-title {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 6vw, 7rem);
+  letter-spacing: 0.03em;
+  line-height: 0.9;
+  color: var(--white);
+  margin-bottom: 24px;
+}
+
+.project-detail-meta {
+  display: flex;
+  gap: 48px;
+}
+
+.meta-item { display: flex; flex-direction: column; gap: 4px; }
+.meta-label {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--grey);
+}
+.meta-value {
+  font-size: 0.85rem;
+  color: var(--off-white);
+}
+
+.project-detail-body {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 80px 64px;
+}
+
+.detail-section { margin-bottom: 80px; }
+
+.detail-section-label {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 16px;
+}
+
+.detail-section-title {
+  font-family: var(--font-display);
+  font-size: 2.4rem;
+  letter-spacing: 0.04em;
+  color: var(--white);
+  margin-bottom: 24px;
+}
+
+.detail-text {
+  font-size: 0.92rem;
+  line-height: 1.9;
+  color: var(--grey-light);
+  max-width: 640px;
+}
+
+.detail-text p + p { margin-top: 18px; }
+.detail-text ul {
+  list-style: none;
+  padding: 0;
+  margin: 18px 0 0;
+}
+.detail-text ul li { position: relative; padding-left: 22px; margin-top: 6px; }
+.detail-text ul li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.85em;
+  width: 10px;
+  height: 1px;
+  background: var(--orange);
+}
+.detail-text ul ul { margin: 6px 0 10px 4px; }
+.detail-text ul ul li::before { background: var(--grey-light); }
+.detail-text strong { color: var(--white); font-weight: 500; letter-spacing: 0.02em; }
+
+.detail-img-grid {
+  display: grid;
+  gap: 3px;
+  margin-top: 40px;
+}
+.detail-img-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+.detail-img-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+.detail-img-placeholder {
+  aspect-ratio: 4/3;
+  background: var(--dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 12px;
+  color: var(--grey-dark);
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+}
+.detail-img-placeholder.tall { aspect-ratio: 3/4; }
+.detail-img-placeholder.wide { aspect-ratio: 16/7; grid-column: span 2; }
+.detail-img-placeholder svg { width: 32px; height: 32px; stroke: rgba(255,255,255,0.06); fill: none; stroke-width: 0.8; }
+
+/* Process photo grid — lightweight gallery of process images */
+.desk-scatter {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  width: 100%;
+  margin: 56px 0 24px;
+}
+.desk-scatter .desk-item {
+  width: 100%;
+  aspect-ratio: 4/3;
+  object-fit: cover;
+  display: block;
+  background: #0a0a0a;
+  position: relative;
+  z-index: 1;
+  cursor: zoom-in;
+  transform-origin: center center;
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+.desk-scatter .desk-item:hover {
+  transform: scale(1.85);
+  z-index: 20;
+  box-shadow: 0 24px 60px rgba(0,0,0,0.6);
+}
+
+/* Final outcome photo grid — larger, clickable to inspect */
+.avian-final-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  width: 100%;
+  margin: 40px 0 16px;
+}
+.avian-final-img {
+  width: 100%;
+  aspect-ratio: 4/3;
+  object-fit: cover;
+  display: block;
+  background: #0a0a0a;
+  cursor: zoom-in;
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+.avian-final-img:hover {
+  transform: scale(1.02);
+  box-shadow: 0 24px 60px rgba(0,0,0,0.6);
+}
+@media (max-width: 720px) {
+  .avian-final-grid { grid-template-columns: 1fr; gap: 12px; }
+}
+
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--grey);
+  padding: 64px 64px 0;
+  transition: color 0.3s;
+}
+.back-btn:hover { color: var(--orange); }
+.back-btn svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.5; }
+
+/* ============================================
+   VISUALIZATION PAGE (SKETCHES)
+   ============================================ */
+.viz-cover {
+  width: 100%;
+  aspect-ratio: 16 / 7;
+  object-fit: cover;
+  display: block;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.viz-grid {
+  padding: 0 64px 80px;
+  columns: 3;
+  column-gap: 3px;
+}
+
+.viz-item {
+  break-inside: avoid;
+  margin-bottom: 3px;
+  position: relative;
+  overflow: hidden;
+  cursor: none;
+}
+
+.viz-img-placeholder {
+  width: 100%;
+  background: var(--dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 10px;
+  color: var(--grey-dark);
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+}
+
+.viz-item:nth-child(3n+1) .viz-img-placeholder { aspect-ratio: 3/4; background: linear-gradient(160deg, #181818, #111); }
+.viz-item:nth-child(3n+2) .viz-img-placeholder { aspect-ratio: 4/3; background: linear-gradient(160deg, #141414, #1a1610); }
+.viz-item:nth-child(3n+3) .viz-img-placeholder { aspect-ratio: 1/1; background: linear-gradient(160deg, #111, #161618); }
+.viz-item:nth-child(5) .viz-img-placeholder { aspect-ratio: 3/2; }
+.viz-item:nth-child(7) .viz-img-placeholder { aspect-ratio: 2/3; }
+
+.viz-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.viz-item-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+.viz-item:hover .viz-item-overlay { opacity: 1; }
+.viz-overlay-label {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--white);
+}
+
+.viz-img { cursor: zoom-in; }
+
+.viz-lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.92);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  cursor: zoom-out;
+  padding: 40px;
+}
+.viz-lightbox.open { display: flex; }
+.viz-lightbox-img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.viz-img-placeholder svg { width: 28px; height: 28px; stroke: rgba(255,255,255,0.07); fill: none; stroke-width: 0.8; }
+
+/* ============================================
+   ABOUT PAGE
+   ============================================ */
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: calc(100vh - var(--nav-h));
+}
+
+.about-left {
+  padding: 80px 64px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-right: 1px solid rgba(255,255,255,0.05);
+}
+
+.about-headshot {
+  width: 180px;
+  height: 220px;
+  background: var(--dark);
+  border: 1px solid var(--grey-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 10px;
+  color: var(--grey);
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  margin-bottom: 48px;
+  position: relative;
+  overflow: hidden;
+}
+.about-headshot::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 40px; height: 40px;
+  border-top: 2px solid var(--orange);
+  border-left: 2px solid var(--orange);
+}
+.about-headshot::after {
+  content: '';
+  position: absolute;
+  bottom: 0; right: 0;
+  width: 40px; height: 40px;
+  border-bottom: 2px solid var(--orange);
+  border-right: 2px solid var(--orange);
+}
+.about-headshot svg { width: 40px; height: 40px; stroke: var(--grey-dark); fill: none; stroke-width: 0.8; }
+
+.about-name {
+  font-family: var(--font-display);
+  font-size: 4rem;
+  letter-spacing: 0.04em;
+  line-height: 0.95;
+  color: var(--white);
+  margin-bottom: 8px;
+}
+
+.about-title-tag {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 32px;
+}
+
+.about-bio {
+  font-size: 0.9rem;
+  line-height: 1.85;
+  color: var(--grey-light);
+  margin-bottom: 24px;
+}
+
+.about-philosophy {
+  padding: 24px;
+  border: 1px solid rgba(255,92,0,0.2);
+  background: rgba(255,92,0,0.04);
+  margin-bottom: 40px;
+}
+.about-philosophy-label {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 12px;
+}
+.about-philosophy p {
+  font-size: 0.85rem;
+  line-height: 1.75;
+  color: var(--grey-light);
+  font-style: italic;
+}
+
+.about-links {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.about-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border: 1px solid var(--grey-dark);
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--grey-light);
+  transition: all 0.3s;
+}
+.about-link:hover { border-color: var(--orange); color: var(--orange); background: rgba(255,92,0,0.04); }
+.about-link svg { width: 12px; height: 12px; fill: none; stroke: currentColor; stroke-width: 1.5; }
+
+.about-right {
+  padding: 80px 64px;
+}
+
+.about-section { margin-bottom: 56px; }
+.about-section-title {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  letter-spacing: 0.04em;
+  color: var(--white);
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+
+.interests-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.interest-tag {
+  padding: 12px 16px;
+  background: var(--dark);
+  border: 1px solid var(--grey-dark);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  color: var(--grey-light);
+}
+
+.inspiration-list { display: flex; flex-direction: column; gap: 12px; }
+.inspiration-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  font-size: 0.85rem;
+  color: var(--grey-light);
+}
+.inspiration-item::before {
+  content: '—';
+  color: var(--orange);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+}
+
+/* ============================================
+   RESUME PAGE
+   ============================================ */
+.resume-layout {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 0;
+  padding: 64px;
+  gap: 80px;
+}
+
+.resume-section { margin-bottom: 56px; }
+
+.resume-section-title {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  letter-spacing: 0.06em;
+  color: var(--white);
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.resume-section-title::before {
+  content: '';
+  width: 28px; height: 2px;
+  background: var(--orange);
+}
+
+.resume-entry { margin-bottom: 28px; padding-bottom: 28px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+.resume-entry:last-child { border-bottom: none; }
+
+.resume-entry-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px; }
+.resume-entry-title {
+  font-size: 0.9rem;
+  color: var(--white);
+  font-weight: 400;
+}
+.resume-entry-date {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  color: var(--orange);
+  white-space: nowrap;
+}
+.resume-entry-sub {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  color: var(--grey);
+  margin-bottom: 10px;
+}
+.resume-entry-desc {
+  font-size: 0.82rem;
+  line-height: 1.7;
+  color: var(--grey-light);
+}
+
+.skills-list { display: flex; flex-direction: column; gap: 16px; }
+.skill-item { }
+.skill-name {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--grey-light);
+  margin-bottom: 6px;
+}
+.skill-bar {
+  height: 2px;
+  background: var(--grey-dark);
+  position: relative;
+  overflow: hidden;
+}
+.skill-fill {
+  height: 100%;
+  background: linear-gradient(to right, var(--orange), rgba(255,92,0,0.4));
+  width: 0;
+  transition: width 1.2s var(--ease);
+}
+.skill-fill.animated { }
+
+.tools-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.tool-tag {
+  padding: 10px 14px;
+  background: var(--dark);
+  border: 1px solid var(--grey-dark);
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  color: var(--grey-light);
+  text-align: center;
+  transition: border-color 0.3s, color 0.3s;
+}
+.tool-tag:hover { border-color: var(--orange); color: var(--orange); }
+
+.download-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 32px;
+  background: var(--orange);
+  color: var(--white);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  transition: background 0.3s, transform 0.2s;
+  margin-bottom: 48px;
+}
+.download-btn:hover { background: var(--orange-dim); transform: translateY(-2px); }
+.download-btn svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.5; }
+
+/* ============================================
+   CONTACT PAGE
+   ============================================ */
+.contact-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: calc(100vh - var(--nav-h) - 200px);
+}
+
+.contact-left {
+  padding: 80px 64px;
+  border-right: 1px solid rgba(255,255,255,0.05);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.contact-big-text {
+  font-family: var(--font-display);
+  font-size: clamp(4rem, 7vw, 8rem);
+  letter-spacing: 0.02em;
+  line-height: 0.9;
+  color: var(--white);
+  margin-bottom: 40px;
+}
+.contact-big-text span { color: var(--orange); }
+
+.contact-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-bottom: 48px;
+}
+
+.contact-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.contact-item-label {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--grey);
+}
+.contact-item-value {
+  font-size: 0.95rem;
+  color: var(--off-white);
+  transition: color 0.3s;
+}
+.contact-item-value:hover { color: var(--orange); }
+
+.contact-socials {
+  display: flex;
+  gap: 12px;
+}
+.contact-social {
+  padding: 12px 24px;
+  border: 1px solid var(--grey-dark);
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--grey-light);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.3s;
+}
+.contact-social:hover { border-color: var(--orange); color: var(--orange); }
+.contact-social svg { width: 12px; height: 12px; fill: none; stroke: currentColor; stroke-width: 1.5; }
+
+.contact-right {
+  padding: 80px 64px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.contact-form { display: flex; flex-direction: column; gap: 24px; }
+
+.form-group { display: flex; flex-direction: column; gap: 8px; }
+.form-label {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--grey);
+}
+.form-input, .form-textarea {
+  background: var(--dark);
+  border: 1px solid var(--grey-dark);
+  color: var(--off-white);
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  padding: 14px 18px;
+  outline: none;
+  transition: border-color 0.3s;
+  resize: none;
+  cursor: none;
+}
+.form-input:focus, .form-textarea:focus { border-color: var(--orange); }
+.form-textarea { min-height: 140px; }
+
+.form-submit {
+  padding: 16px 40px;
+  background: transparent;
+  border: 1px solid var(--orange);
+  color: var(--orange);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  align-self: flex-start;
+  transition: all 0.3s;
+}
+.form-submit:hover { background: var(--orange); color: var(--black); }
+.form-status { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; min-height: 1em; margin: 0; }
+
+/* ============================================
+   FOOTER
+   ============================================ */
+footer {
+  border-top: 1px solid rgba(255,255,255,0.06);
+  padding: 48px 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.footer-left {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.footer-name {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  letter-spacing: 0.08em;
+  color: var(--white);
+}
+.footer-copy {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  color: var(--grey);
+}
+
+.footer-mid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.footer-email {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--grey-light);
+  transition: color 0.3s;
+}
+.footer-email:hover { color: var(--orange); }
+
+.footer-socials {
+  display: flex;
+  gap: 12px;
+}
+.footer-social {
+  width: 30px; height: 30px;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid var(--grey-dark);
+  border-radius: 3px;
+  color: var(--grey-light);
+  transition: all 0.3s;
+}
+.footer-social:hover { border-color: var(--orange); color: var(--orange); }
+.footer-social svg { width: 12px; height: 12px; fill: none; stroke: currentColor; stroke-width: 1.5; }
+
+/* ============================================
+   FADE IN ANIMATION
+   ============================================ */
+.fade-in {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
+}
+.fade-in.visible { opacity: 1; transform: translateY(0); }
+.fade-in-delay-1 { transition-delay: 0.1s; }
+.fade-in-delay-2 { transition-delay: 0.2s; }
+.fade-in-delay-3 { transition-delay: 0.3s; }
+.fade-in-delay-4 { transition-delay: 0.4s; }
+
+/* ============================================
+   NOISE TEXTURE OVERLAY
+   ============================================ */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 9990;
+  pointer-events: none;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+}
+
+/* ============================================
+   ORANGE ACCENT LINE
+   ============================================ */
+.orange-line {
+  width: 48px; height: 2px;
+  background: var(--orange);
+  margin-bottom: 20px;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 1024px) {
+  nav { padding: 0 32px; }
+  .nav-links { gap: 28px; }
+  .hero { grid-template-columns: 1fr; }
+  .hero-right { display: none; }
+  .hero-left { padding: 60px 32px; }
+  .home-featured { padding: 80px 32px; }
+  .featured-grid { grid-template-columns: 1fr 1fr; }
+  .page-hero { padding: 80px 32px 48px; }
+  .projects-grid { padding: 48px 32px; }
+  .about-grid { grid-template-columns: 1fr; }
+  .about-right { padding: 0 64px 80px; }
+  .resume-layout { grid-template-columns: 1fr; padding: 48px 32px; gap: 40px; }
+  .contact-layout { grid-template-columns: 1fr; }
+  .contact-right { border-top: 1px solid rgba(255,255,255,0.05); }
+  footer { padding: 40px 32px; }
+  .viz-grid { padding: 0 32px 60px; columns: 2; }
+  .project-detail-body { padding: 60px 32px; }
+  .back-btn { padding: 48px 32px 0; }
+}
+
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .hamburger { display: flex; }
+  .mobile-menu { display: flex; }
+  .hero-title { font-size: 5rem; }
+  .featured-grid { grid-template-columns: 1fr; }
+  .projects-grid { grid-template-columns: 1fr; padding: 32px 24px; }
+  .project-card.large { grid-column: span 1; aspect-ratio: 4/5; }
+  .about-left { padding: 60px 24px; }
+  .about-right { padding: 0 24px 60px; }
+  .contact-left, .contact-right { padding: 60px 24px; }
+  footer { flex-direction: column; gap: 24px; text-align: center; }
+  .viz-grid { columns: 1; padding: 0 24px 48px; }
+  .resume-layout { padding: 40px 24px; }
+  .home-featured { padding: 60px 24px; }
+  .detail-img-grid.cols-2, .detail-img-grid.cols-3 { grid-template-columns: 1fr; }
+  .detail-img-placeholder.wide { grid-column: span 1; aspect-ratio: 4/3; }
+  .project-detail-content { padding: 48px 24px; }
+  nav { padding: 0 24px; }
+  nav .nav-socials { display: none; }
+  .desk-scatter { grid-template-columns: repeat(2, 1fr); gap: 10px; margin: 32px 0 16px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Custom Cursor -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- Navigation -->
+<nav id="mainNav">
+  <a href="#" class="nav-logo" onclick="showPage('home')">DK<span>.</span></a>
+  <ul class="nav-links">
+    <li><a href="#" onclick="showPage('projects')" data-page="projects">Projects</a></li>
+    <li><a href="#" onclick="showPage('visualization')" data-page="visualization">Visualization</a></li>
+    <li><a href="#" onclick="showPage('about')" data-page="about">About Me</a></li>
+    <li><a href="#" onclick="showPage('resume')" data-page="resume">Résumé</a></li>
+    <li><a href="#" onclick="showPage('contact')" data-page="contact">Contact</a></li>
+  </ul>
+  <div class="nav-socials">
+    <a href="https://www.linkedin.com/in/declankuebler" target="_blank" title="LinkedIn">
+      <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+    </a>
+    <a href="https://www.instagram.com/dunce_k18/" target="_blank" title="Instagram">
+      <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+    </a>
+    <a href="https://www.artstation.com/declankuebler18" target="_blank" title="ArtStation">
+      <svg viewBox="0 0 24 24"><path d="M2 17L12 4l10 13H2z"/><path d="M0 19h24l-3-4H3z"/></svg>
+    </a>
+  </div>
+  <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#" onclick="showPage('home'); toggleMobileMenu()">Home</a>
+  <a href="#" onclick="showPage('projects'); toggleMobileMenu()">Projects</a>
+  <a href="#" onclick="showPage('visualization'); toggleMobileMenu()">Visualization</a>
+  <a href="#" onclick="showPage('about'); toggleMobileMenu()">About Me</a>
+  <a href="#" onclick="showPage('resume'); toggleMobileMenu()">Résumé</a>
+  <a href="#" onclick="showPage('contact'); toggleMobileMenu()">Contact</a>
+</div>
+
+<!-- ============================================
+     HOME PAGE
+     ============================================ -->
+<div class="page active" id="page-home">
+  <section class="hero">
+    <div class="hero-left">
+      <p class="hero-label fade-in">Industrial Designer · DAAP · University of Cincinnati</p>
+      <h1 class="hero-title fade-in fade-in-delay-1">DECLAN<br>KUEBLER</h1>
+      <p class="hero-tagline fade-in fade-in-delay-2">Working at the intersection of speculative inquiry and real‑world constraints, by designing for both tangible environments and fictional production. Using design to test possible futures and translate them into grounded, actionable forms.</p>
+      <a href="#" class="hero-cta fade-in fade-in-delay-3" onclick="showPage('projects')">
+        View Work
+        <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <div class="hero-scroll-indicator">
+        <div class="hero-scroll-line"></div>
+        Scroll
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-img-placeholder">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        HERO IMAGE
+      </div>
+    </div>
+  </section>
+
+  <section class="home-featured">
+    <div class="section-header">
+      <div>
+        <p class="section-label">Selected Work</p>
+        <h2 class="section-title">FEATURED<br>PROJECTS</h2>
+      </div>
+      <a href="#" class="view-all-link" onclick="showPage('projects')">
+        View All
+        <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+    <div class="featured-grid">
+      <div class="project-card fade-in" onclick="showProjectDetail('kabutomushi')">
+        <div class="project-card-img"><div class="project-img-bg bg-1">
+          <svg viewBox="0 0 24 24"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"/></svg>
+          PROJECT IMAGE
+        </div></div>
+        <div class="project-card-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        <div class="project-card-overlay">
+          <p class="project-card-tag">// Studio Project</p>
+          <h3 class="project-card-title">KABUTOMUSHI</h3>
+          <p class="project-card-desc">Biomimetic product design inspired by the Japanese rhinoceros beetle. Structural integrity meets formal experimentation.</p>
+        </div>
+      </div>
+      <div class="project-card fade-in fade-in-delay-1" onclick="showProjectDetail('entropy')">
+        <div class="project-card-img"><div class="project-img-bg bg-2">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+          PROJECT IMAGE
+        </div></div>
+        <div class="project-card-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        <div class="project-card-overlay">
+          <p class="project-card-tag">// Studio Project</p>
+          <h3 class="project-card-title">ENTROPY</h3>
+          <p class="project-card-desc">A chess set exploring the concept of systemic decay. Cast forms that erode across the back row.</p>
+        </div>
+      </div>
+      <div class="project-card fade-in fade-in-delay-2" onclick="showProjectDetail('avian')">
+        <div class="project-card-img"><div class="project-img-bg" style="background:url('assets/avian-final/dynamic-float-full.jpg') center/cover no-repeat;"></div></div>
+        <div class="project-card-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        <div class="project-card-overlay">
+          <p class="project-card-tag">// Studio Project</p>
+          <h3 class="project-card-title">The Squat</h3>
+          <p class="project-card-desc">Speculative common grackle nester.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-left">
+      <span class="footer-name">DECLAN KUEBLER</span>
+      <span class="footer-copy">© 2025 All rights reserved</span>
+    </div>
+    <div class="footer-mid">
+      <a href="mailto:declanjkuebler@icloud.com" class="footer-email">declanjkuebler@icloud.com</a>
+    </div>
+    <div class="footer-socials">
+      <a href="https://www.linkedin.com/in/declankuebler" target="_blank" class="footer-social" title="LinkedIn">
+        <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+      </a>
+      <a href="https://www.instagram.com/dunce_k18/" target="_blank" class="footer-social" title="Instagram">
+        <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+      </a>
+      <a href="https://www.artstation.com/declankuebler18" target="_blank" class="footer-social" title="ArtStation">
+        <svg viewBox="0 0 24 24"><path d="M2 17L12 4l10 13H2z"/><path d="M0 19h24l-3-4H3z"/></svg>
+      </a>
+    </div>
+  </footer>
+</div>
+
+<!-- ============================================
+     PROJECTS PAGE
+     ============================================ -->
+<div class="page" id="page-projects">
+  <div class="page-hero">
+    <p class="page-hero-label">Selected Work — 2024–2025</p>
+    <h1 class="page-hero-title">PROJECTS</h1>
+    <p class="page-hero-sub">A collection of studio work exploring the edge between speculation and production.</p>
+  </div>
+
+  <div class="projects-grid">
+    <div class="project-card large fade-in" onclick="showProjectDetail('kabutomushi')">
+      <div class="project-card-img"><div class="project-img-bg bg-1" style="aspect-ratio:auto;height:100%">
+        <svg viewBox="0 0 24 24"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"/></svg>
+        FEATURED IMAGE
+      </div></div>
+      <div class="project-card-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+      <div class="project-card-overlay">
+        <p class="project-card-tag">// Studio Project · 2025</p>
+        <h3 class="project-card-title">KABUTOMUSHI</h3>
+        <p class="project-card-desc">Biomimetic product design inspired by the Japanese rhinoceros beetle. Structural integrity meets formal experimentation.</p>
+      </div>
+    </div>
+
+    <div class="project-card fade-in" onclick="showProjectDetail('entropy')">
+      <div class="project-card-img"><div class="project-img-bg bg-2">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+        PROJECT IMAGE
+      </div></div>
+      <div class="project-card-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+      <div class="project-card-overlay">
+        <p class="project-card-tag">// Studio Project · 2025</p>
+        <h3 class="project-card-title">ENTROPY: A CHESS SET</h3>
+        <p class="project-card-desc">A chess set exploring systemic decay. Cast forms that erode across the back row.</p>
+      </div>
+    </div>
+
+    <div class="project-card fade-in fade-in-delay-1" onclick="showProjectDetail('avian')">
+      <div class="project-card-img"><div class="project-img-bg" style="background:url('assets/avian-final/dynamic-float-full.jpg') center/cover no-repeat;"></div></div>
+      <div class="project-card-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+      <div class="project-card-overlay">
+        <p class="project-card-tag">// Studio Project · 2026</p>
+        <h3 class="project-card-title">The Squat</h3>
+        <p class="project-card-desc">Speculative common grackle nester.</p>
+      </div>
+    </div>
+
+    <div class="project-card fade-in fade-in-delay-1" onclick="showProjectDetail('amore')">
+      <div class="project-card-img"><div class="project-img-bg bg-4">
+        <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        PROJECT IMAGE
+      </div></div>
+      <div class="project-card-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+      <div class="project-card-overlay">
+        <p class="project-card-tag">// Studio Project · 2024</p>
+        <h3 class="project-card-title">AMORE</h3>
+        <p class="project-card-desc">Consumer product exploration at the intersection of technology and intimacy.</p>
+      </div>
+    </div>
+
+    <div class="project-card fade-in" onclick="showProjectDetail('form-study')">
+      <div class="project-card-img"><div class="project-img-bg bg-5">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>
+        PROJECT IMAGE
+      </div></div>
+      <div class="project-card-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+      <div class="project-card-overlay">
+        <p class="project-card-tag">// Form Study · 2024</p>
+        <h3 class="project-card-title">FORM STUDY 01</h3>
+        <p class="project-card-desc">An investigation of primitive volumes and their emotional register.</p>
+      </div>
+    </div>
+
+    <div class="project-card fade-in fade-in-delay-1" onclick="showProjectDetail('fictional')">
+      <div class="project-card-img"><div class="project-img-bg bg-6">
+        <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        PROJECT IMAGE
+      </div></div>
+      <div class="project-card-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+      <div class="project-card-overlay">
+        <p class="project-card-tag">// Speculative · 2024</p>
+        <h3 class="project-card-title">FICTIONAL PROP 01</h3>
+        <p class="project-card-desc">Worldbuilding through object design — artifacts from alternate futures.</p>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-left">
+      <span class="footer-name">DECLAN KUEBLER</span>
+      <span class="footer-copy">© 2025 All rights reserved</span>
+    </div>
+    <div class="footer-mid"><a href="mailto:declanjkuebler@icloud.com" class="footer-email">declanjkuebler@icloud.com</a></div>
+    <div class="footer-socials">
+      <a href="https://www.linkedin.com/in/declankuebler" target="_blank" class="footer-social"><svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+      <a href="https://www.instagram.com/dunce_k18/" target="_blank" class="footer-social"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+    </div>
+  </footer>
+</div>
+
+<!-- ============================================
+     PROJECT DETAIL PAGE
+     ============================================ -->
+<div class="page" id="page-project-detail">
+  <a href="#" class="back-btn" onclick="showPage('projects')">
+    <svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    Back to Projects
+  </a>
+
+  <div class="project-detail-hero">
+    <div class="project-detail-bg" id="detailBg" style="background: linear-gradient(135deg, #1a1a0a, #0a0a0a);"></div>
+    <div class="project-detail-content">
+      <p class="project-detail-category" id="detailCategory">// Studio Project</p>
+      <h1 class="project-detail-title" id="detailTitle">PROJECT TITLE</h1>
+      <div class="project-detail-meta">
+        <div class="meta-item">
+          <span class="meta-label">Year</span>
+          <span class="meta-value" id="detailYear">2025</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Type</span>
+          <span class="meta-value" id="detailType">Product Design</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Tools</span>
+          <span class="meta-value" id="detailTools">Fusion 360 · KeyShot</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="project-detail-body">
+    <div class="detail-section fade-in">
+      <p class="detail-section-label" id="detailProblemLabel">01 — The Problem</p>
+      <h2 class="detail-section-title" id="detailProblemTitle">Design Brief</h2>
+      <div class="detail-text" id="detailProblem">Placeholder problem statement. Replace with the actual brief, challenge, or speculative prompt that initiated this project. What gap, tension, or question does this work respond to?</div>
+    </div>
+
+    <div class="detail-section fade-in">
+      <p class="detail-section-label" id="detailIdeationLabel">02 — Process</p>
+      <h2 class="detail-section-title" id="detailIdeationTitle">Research & Ideation</h2>
+      <div class="detail-text" id="detailIdeationContent">
+        <p>Placeholder process description. Document your research methods, ideation approaches, sketching phases, prototyping iterations, and key decision points throughout the project.</p>
+        <div class="detail-img-grid cols-3">
+          <div class="detail-img-placeholder">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+            SKETCH / PROCESS
+          </div>
+          <div class="detail-img-placeholder">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+            SKETCH / PROCESS
+          </div>
+          <div class="detail-img-placeholder">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+            CAD MODEL
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="detail-section fade-in">
+      <p class="detail-section-label" id="detailDevelopmentLabel">03 — Development</p>
+      <h2 class="detail-section-title" id="detailDevelopmentTitle">Refinement & Prototyping</h2>
+      <div class="detail-text" id="detailDevelopmentContent">
+        <p>Placeholder development notes. Describe material investigations, prototype iterations, fabrication methods, and how the form evolved from initial concept to final resolution.</p>
+        <div class="detail-img-grid cols-2">
+          <div class="detail-img-placeholder wide">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+            PROTOTYPE / DEVELOPMENT IMAGE
+          </div>
+          <div class="detail-img-placeholder">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+            DETAIL
+          </div>
+          <div class="detail-img-placeholder">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+            DETAIL
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="detail-section fade-in">
+      <p class="detail-section-label" id="detailOutcomeLabel">04 — Outcome</p>
+      <h2 class="detail-section-title" id="detailOutcomeTitle">Final Resolution</h2>
+      <div class="detail-text" id="detailOutcomeContent">
+        <p>Placeholder outcome description. Summarize what the final object, system, or speculative artifact communicates. What did you learn? What futures does it propose or critique?</p>
+        <div class="detail-img-grid cols-2">
+          <div class="detail-img-placeholder tall">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+            FINAL RENDER
+          </div>
+          <div class="detail-img-placeholder tall">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+            FINAL RENDER
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-left">
+      <span class="footer-name">DECLAN KUEBLER</span>
+      <span class="footer-copy">© 2025 All rights reserved</span>
+    </div>
+    <div class="footer-mid"><a href="mailto:declanjkuebler@icloud.com" class="footer-email">declanjkuebler@icloud.com</a></div>
+    <div class="footer-socials">
+      <a href="https://www.linkedin.com/in/declankuebler" target="_blank" class="footer-social"><svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+      <a href="https://www.instagram.com/dunce_k18/" target="_blank" class="footer-social"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+    </div>
+  </footer>
+</div>
+
+<!-- ============================================
+     VISUALIZATION PAGE
+     ============================================ -->
+<div class="page" id="page-visualization">
+  <img class="viz-cover" src="assets/visualization-cover.png" alt="Visualization cover">
+  <div class="page-hero">
+    <p class="page-hero-label">Process Work — Sketches & Ideation</p>
+    <h1 class="page-hero-title">VISUALIZATION</h1>
+    <p class="page-hero-sub">Personal analog and digital sketches alongside studio ideation and process work.</p>
+  </div>
+
+  <div class="viz-grid">
+    <div class="viz-item fade-in">
+      <img class="viz-img" src="assets/visualization/iss_sketch.sk3tch.png" alt="ISS sketch" loading="lazy" onclick="openVizLightbox(this)">
+      <div class="viz-item-overlay"><span class="viz-overlay-label">ISS.sk3tch</span></div>
+    </div>
+    <div class="viz-item fade-in fade-in-delay-1">
+      <img class="viz-img" src="assets/visualization/3ds_id.sk3tch.jpg" alt="3DS ID sketch" loading="lazy" onclick="openVizLightbox(this)">
+      <div class="viz-item-overlay"><span class="viz-overlay-label">3DS.sk3tch</span></div>
+    </div>
+    <div class="viz-item fade-in fade-in-delay-2">
+      <img class="viz-img" src="assets/visualization/quadblaster_sketch.sk3tch.png" alt="Quadblaster sketch" loading="lazy" onclick="openVizLightbox(this)">
+      <div class="viz-item-overlay"><span class="viz-overlay-label">Quadblaster.sk3tch</span></div>
+    </div>
+    <div class="viz-item fade-in">
+      <img class="viz-img" src="assets/visualization/headphones1_id.sk3tch.jpg" alt="Headphones ID sketch 1" loading="lazy" onclick="openVizLightbox(this)">
+      <div class="viz-item-overlay"><span class="viz-overlay-label">Headphones 1.sk3tch</span></div>
+    </div>
+    <div class="viz-item fade-in fade-in-delay-1">
+      <img class="viz-img" src="assets/visualization/mudslide_sketch.sk3tch.png" alt="Mudslide sketch" loading="lazy" onclick="openVizLightbox(this)">
+      <div class="viz-item-overlay"><span class="viz-overlay-label">Mudslide.sk3tch</span></div>
+    </div>
+    <div class="viz-item fade-in fade-in-delay-2">
+      <img class="viz-img" src="assets/visualization/headphones2_id.sk3tch.jpg" alt="Headphones ID sketch 2" loading="lazy" onclick="openVizLightbox(this)">
+      <div class="viz-item-overlay"><span class="viz-overlay-label">Headphones 2.sk3tch</span></div>
+    </div>
+    <div class="viz-item fade-in">
+      <img class="viz-img" src="assets/visualization/skidoobear_sketch.sk3tch.png" alt="Skidoobear sketch" loading="lazy" onclick="openVizLightbox(this)">
+      <div class="viz-item-overlay"><span class="viz-overlay-label">Skidoobear.sk3tch</span></div>
+    </div>
+    <div class="viz-item fade-in fade-in-delay-1">
+      <img class="viz-img" src="assets/visualization/idcanon_id.sk3tch.jpg" alt="Canon ID sketch" loading="lazy" onclick="openVizLightbox(this)">
+      <div class="viz-item-overlay"><span class="viz-overlay-label">Canon.sk3tch</span></div>
+    </div>
+    <div class="viz-item fade-in fade-in-delay-2">
+      <img class="viz-img" src="assets/visualization/thecreator_sketch.sk3tch.png" alt="The Creator sketch" loading="lazy" onclick="openVizLightbox(this)">
+      <div class="viz-item-overlay"><span class="viz-overlay-label">The Creator.sk3tch</span></div>
+    </div>
+    <div class="viz-item fade-in">
+      <img class="viz-img" src="assets/visualization/iron1_id.sk3tch.jpg" alt="Iron ID sketch 1" loading="lazy" onclick="openVizLightbox(this)">
+      <div class="viz-item-overlay"><span class="viz-overlay-label">Iron 1.sk3tch</span></div>
+    </div>
+    <div class="viz-item fade-in fade-in-delay-1">
+      <img class="viz-img" src="assets/visualization/avatar_sketch.sk3tch.png" alt="Avatar sketch" loading="lazy" onclick="openVizLightbox(this)">
+      <div class="viz-item-overlay"><span class="viz-overlay-label">Avatar.sk3tch</span></div>
+    </div>
+    <div class="viz-item fade-in fade-in-delay-2">
+      <img class="viz-img" src="assets/visualization/iron2_id.sk3tch.jpg" alt="Iron ID sketch 2" loading="lazy" onclick="openVizLightbox(this)">
+      <div class="viz-item-overlay"><span class="viz-overlay-label">Iron 2.sk3tch</span></div>
+    </div>
+    <div class="viz-item fade-in">
+      <img class="viz-img" src="assets/visualization/hulkbustervhulk_sketch.sk3tch.png" alt="Hulkbuster vs Hulk sketch" loading="lazy" onclick="openVizLightbox(this)">
+      <div class="viz-item-overlay"><span class="viz-overlay-label">Hulkbuster vs Hulk.sk3tch</span></div>
+    </div>
+    <div class="viz-item fade-in fade-in-delay-1">
+      <img class="viz-img" src="assets/visualization/iron3_id.sk3tch.jpg" alt="Iron ID sketch 3" loading="lazy" onclick="openVizLightbox(this)">
+      <div class="viz-item-overlay"><span class="viz-overlay-label">Iron 3.sk3tch</span></div>
+    </div>
+    <div class="viz-item fade-in fade-in-delay-2">
+      <img class="viz-img" src="assets/visualization/thetown_sketch.sk3tch.png" alt="The Town sketch" loading="lazy" onclick="openVizLightbox(this)">
+      <div class="viz-item-overlay"><span class="viz-overlay-label">The Town.sk3tch</span></div>
+    </div>
+    <div class="viz-item fade-in">
+      <img class="viz-img" src="assets/visualization/massage_ideation1_id.sk3tch.jpg" alt="Massage ideation 1" loading="lazy" onclick="openVizLightbox(this)">
+      <div class="viz-item-overlay"><span class="viz-overlay-label">Massage Ideation 1.sk3tch</span></div>
+    </div>
+    <div class="viz-item fade-in fade-in-delay-1">
+      <img class="viz-img" src="assets/visualization/medieval_sketch.sk3tch.png" alt="Medieval sketch" loading="lazy" onclick="openVizLightbox(this)">
+      <div class="viz-item-overlay"><span class="viz-overlay-label">Medieval.sk3tch</span></div>
+    </div>
+    <div class="viz-item fade-in fade-in-delay-2">
+      <img class="viz-img" src="assets/visualization/massage_ideation2_id.sk3tch.jpg" alt="Massage ideation 2" loading="lazy" onclick="openVizLightbox(this)">
+      <div class="viz-item-overlay"><span class="viz-overlay-label">Massage Ideation 2.sk3tch</span></div>
+    </div>
+    <div class="viz-item fade-in">
+      <img class="viz-img" src="assets/visualization/f1_sketch.sk3tch.png" alt="F1 sketch" loading="lazy" onclick="openVizLightbox(this)">
+      <div class="viz-item-overlay"><span class="viz-overlay-label">F1.sk3tch</span></div>
+    </div>
+    <div class="viz-item fade-in fade-in-delay-1">
+      <img class="viz-img" src="assets/visualization/massage_ideation3_id.sk3tch.jpg" alt="Massage ideation 3" loading="lazy" onclick="openVizLightbox(this)">
+      <div class="viz-item-overlay"><span class="viz-overlay-label">Massage Ideation 3.sk3tch</span></div>
+    </div>
+    <div class="viz-item fade-in fade-in-delay-2">
+      <img class="viz-img" src="assets/visualization/redsox_sketch.sk3tch.png" alt="Red Sox sketch" loading="lazy" onclick="openVizLightbox(this)">
+      <div class="viz-item-overlay"><span class="viz-overlay-label">Red Sox.sk3tch</span></div>
+    </div>
+    <div class="viz-item fade-in">
+      <img class="viz-img" src="assets/visualization/massage_id.sk3tch.jpg" alt="Massage ID sketch" loading="lazy" onclick="openVizLightbox(this)">
+      <div class="viz-item-overlay"><span class="viz-overlay-label">Massage.sk3tch</span></div>
+    </div>
+    <div class="viz-item fade-in fade-in-delay-1">
+      <img class="viz-img" src="assets/visualization/argo_sketch.sk3tch.png" alt="Argo sketch" loading="lazy" onclick="openVizLightbox(this)">
+      <div class="viz-item-overlay"><span class="viz-overlay-label">Argo.sk3tch</span></div>
+    </div>
+    <div class="viz-item fade-in fade-in-delay-2">
+      <img class="viz-img" src="assets/visualization/rotarytool_ideation1_id.sk3tch.jpg" alt="Rotary tool ideation 1" loading="lazy" onclick="openVizLightbox(this)">
+      <div class="viz-item-overlay"><span class="viz-overlay-label">Rotary Tool Ideation 1.sk3tch</span></div>
+    </div>
+    <div class="viz-item fade-in">
+      <img class="viz-img" src="assets/visualization/rotarytool_ideation2_id.sk3tch.jpg" alt="Rotary tool ideation 2" loading="lazy" onclick="openVizLightbox(this)">
+      <div class="viz-item-overlay"><span class="viz-overlay-label">Rotary Tool Ideation 2.sk3tch</span></div>
+    </div>
+    <div class="viz-item fade-in fade-in-delay-1">
+      <img class="viz-img" src="assets/visualization/rotarytool_id.sk3tch.jpg" alt="Rotary tool ID sketch" loading="lazy" onclick="openVizLightbox(this)">
+      <div class="viz-item-overlay"><span class="viz-overlay-label">Rotary Tool.sk3tch</span></div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-left">
+      <span class="footer-name">DECLAN KUEBLER</span>
+      <span class="footer-copy">© 2025 All rights reserved</span>
+    </div>
+    <div class="footer-mid"><a href="mailto:declanjkuebler@icloud.com" class="footer-email">declanjkuebler@icloud.com</a></div>
+    <div class="footer-socials">
+      <a href="https://www.linkedin.com/in/declankuebler" target="_blank" class="footer-social"><svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+      <a href="https://www.instagram.com/dunce_k18/" target="_blank" class="footer-social"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+    </div>
+  </footer>
+</div>
+
+<!-- ============================================
+     ABOUT PAGE
+     ============================================ -->
+<div class="page" id="page-about">
+  <div class="about-grid">
+    <div class="about-left">
+      <div>
+        <div class="about-headshot">
+          <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          HEADSHOT
+        </div>
+        <p class="about-title-tag">// Industrial Designer · DAAP 2030</p>
+        <h1 class="about-name">DECLAN<br>KUEBLER</h1>
+      </div>
+
+      <div>
+        <p class="about-bio">Placeholder — Replace with your own words. Currently a first-year Industrial Design student at the University of Cincinnati's College of Design, Architecture, Art, and Planning (DAAP). Interested in the edges between speculative fiction and functional form.</p>
+        <p class="about-bio">My work explores how objects carry meaning, embed assumptions about the future, and participate in cultural systems larger than their physical form.</p>
+
+        <div class="about-philosophy">
+          <p class="about-philosophy-label">Design Philosophy</p>
+          <p>Working at the intersection of speculative inquiry and real‑world constraints — using design to test possible futures and translate them into grounded, actionable forms.</p>
+        </div>
+
+        <div class="about-links">
+          <a href="https://www.linkedin.com/in/declankuebler" target="_blank" class="about-link">
+            <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+            LinkedIn
+          </a>
+          <a href="https://www.artstation.com/declankuebler18" target="_blank" class="about-link">
+            <svg viewBox="0 0 24 24"><path d="M2 17L12 4l10 13H2z"/><path d="M0 19h24l-3-4H3z"/></svg>
+            ArtStation
+          </a>
+          <a href="https://www.instagram.com/dunce_k18/" target="_blank" class="about-link">
+            <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/></svg>
+            Instagram
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="about-right">
+      <div class="about-section">
+        <h2 class="about-section-title">Interests</h2>
+        <div class="interests-grid">
+          <div class="interest-tag">Speculative Design</div>
+          <div class="interest-tag">Prop & Set Design</div>
+          <div class="interest-tag">Material Culture</div>
+          <div class="interest-tag">Worldbuilding</div>
+          <div class="interest-tag">Critical Making</div>
+          <div class="interest-tag">Product Semantics</div>
+          <div class="interest-tag">Parametric Form</div>
+        </div>
+      </div>
+
+      <div class="about-section">
+        <h2 class="about-section-title">Inspirations</h2>
+        <div class="inspiration-list">
+          <div class="inspiration-item">Dieter Rams — Reduction as a form of honesty</div>
+          <div class="inspiration-item">Naoto Fukasawa — Objects that dissolve into behavior</div>
+          <div class="inspiration-item">Neri Oxman — Biology as design language</div>
+          <div class="inspiration-item">Dunne & Raby — Design as critical provocation</div>
+          <div class="inspiration-item">Syd Mead — Visual futurism with structural logic</div>
+        </div>
+      </div>
+
+      <div class="about-section">
+        <h2 class="about-section-title">Approach</h2>
+        <p style="font-size:0.88rem;line-height:1.85;color:var(--grey-light);">I start with questions, not answers. Every project begins with identifying what assumptions are being made about users, environments, or futures — and then designing against or within those assumptions deliberately. The process is iterative, material-forward, and always anchored to a speculative prompt that keeps the work from becoming purely functional.</p>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-left">
+      <span class="footer-name">DECLAN KUEBLER</span>
+      <span class="footer-copy">© 2025 All rights reserved</span>
+    </div>
+    <div class="footer-mid"><a href="mailto:declanjkuebler@icloud.com" class="footer-email">declanjkuebler@icloud.com</a></div>
+    <div class="footer-socials">
+      <a href="https://www.linkedin.com/in/declankuebler" target="_blank" class="footer-social"><svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+      <a href="https://www.instagram.com/dunce_k18/" target="_blank" class="footer-social"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+    </div>
+  </footer>
+</div>
+
+<!-- ============================================
+     CONTACT PAGE
+     ============================================ -->
+<div class="page" id="page-contact">
+  <div class="page-hero">
+    <p class="page-hero-label">Let's Connect</p>
+    <h1 class="page-hero-title">CONTACT</h1>
+  </div>
+
+  <div class="contact-layout">
+    <div class="contact-left">
+      <div class="contact-detail">
+        <div class="contact-item">
+          <span class="contact-item-label">Email</span>
+          <a href="mailto:declanjkuebler@icloud.com" class="contact-item-value">declanjkuebler@icloud.com</a>
+        </div>
+        <div class="contact-item">
+          <span class="contact-item-label">Location</span>
+          <span class="contact-item-value">Cincinnati, OH — DAAP</span>
+        </div>
+        <div class="contact-item">
+          <span class="contact-item-label">Availability</span>
+          <span class="contact-item-value">Open to internships & collaborations</span>
+        </div>
+      </div>
+      <div class="contact-socials">
+        <a href="https://www.linkedin.com/in/declankuebler" target="_blank" class="contact-social">
+          <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          LinkedIn
+        </a>
+        <a href="https://www.instagram.com/dunce_k18/" target="_blank" class="contact-social">
+          <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+          Instagram
+        </a>
+        <a href="https://www.artstation.com/declankuebler18" target="_blank" class="contact-social">
+          <svg viewBox="0 0 24 24"><path d="M2 17L12 4l10 13H2z"/><path d="M0 19h24l-3-4H3z"/></svg>
+          ArtStation
+        </a>
+      </div>
+    </div>
+    <div class="contact-right">
+      <form id="contact-form" name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" class="contact-form">
+        <input type="hidden" name="form-name" value="contact" />
+        <input type="hidden" name="subject" value="New message from your portfolio contact form" />
+        <p style="display:none">
+          <label>Don't fill this out: <input name="bot-field" /></label>
+        </p>
+        <div class="form-group">
+          <label class="form-label" for="contact-name">Name</label>
+          <input id="contact-name" name="name" class="form-input" type="text" placeholder="Your name" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="contact-email">Email</label>
+          <input id="contact-email" name="email" class="form-input" type="email" placeholder="your@email.com" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="contact-subject">Subject</label>
+          <input id="contact-subject" name="inquiry-subject" class="form-input" type="text" placeholder="What's this about?">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="contact-message">Message</label>
+          <textarea id="contact-message" name="message" class="form-textarea" placeholder="Tell me about the project, opportunity, or idea..." required></textarea>
+        </div>
+        <button type="submit" class="form-submit">Send Message</button>
+        <p id="contact-form-status" class="form-status" aria-live="polite"></p>
+      </form>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-left">
+      <span class="footer-name">DECLAN KUEBLER</span>
+      <span class="footer-copy">© 2025 All rights reserved</span>
+    </div>
+    <div class="footer-mid"><a href="mailto:declanjkuebler@icloud.com" class="footer-email">declanjkuebler@icloud.com</a></div>
+    <div class="footer-socials">
+      <a href="https://www.linkedin.com/in/declankuebler" target="_blank" class="footer-social"><svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+      <a href="https://www.instagram.com/dunce_k18/" target="_blank" class="footer-social"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+    </div>
+  </footer>
+</div>
+
+<!-- ============================================
+     JAVASCRIPT
+     ============================================ -->
+
+<div class="viz-lightbox" id="vizLightbox" onclick="closeVizLightbox()">
+  <img class="viz-lightbox-img" id="vizLightboxImg" alt="">
+</div>
+
+<script>
+// ---- Custom Cursor ----
+const cursor = document.getElementById('cursor');
+const cursorRing = document.getElementById('cursorRing');
+let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+
+document.addEventListener('mousemove', e => {
+  mouseX = e.clientX; mouseY = e.clientY;
+  cursor.style.left = mouseX + 'px';
+  cursor.style.top = mouseY + 'px';
+});
+
+(function animateRing() {
+  ringX += (mouseX - ringX) * 0.22;
+  ringY += (mouseY - ringY) * 0.22;
+  cursorRing.style.left = ringX + 'px';
+  cursorRing.style.top = ringY + 'px';
+  requestAnimationFrame(animateRing);
+})();
+
+document.querySelectorAll('a, button, .project-card, .viz-item, .tool-tag').forEach(el => {
+  el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
+  el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
+});
+
+// ---- Page Navigation ----
+let currentPage = 'home';
+
+function openVizLightbox(imgEl) {
+  const lb = document.getElementById('vizLightbox');
+  const lbImg = document.getElementById('vizLightboxImg');
+  if (!lb || !lbImg) return;
+  lbImg.src = imgEl.src;
+  lbImg.alt = imgEl.alt || '';
+  lb.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeVizLightbox() {
+  const lb = document.getElementById('vizLightbox');
+  if (!lb) return;
+  lb.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeVizLightbox();
+});
+
+function showPage(pageId) {
+  // Hide all
+  document.querySelectorAll('.page').forEach(p => {
+    p.classList.remove('active');
+  });
+  // Show target
+  const target = document.getElementById('page-' + pageId);
+  if (target) {
+    target.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    currentPage = pageId;
+    updateNavLinks(pageId);
+    setTimeout(() => initFadeIns(), 100);
+    if (pageId !== 'project-detail') animateSkillBars();
+  }
+  return false;
+}
+
+function updateNavLinks(pageId) {
+  document.querySelectorAll('.nav-links a').forEach(a => {
+    a.classList.remove('active');
+    if (a.dataset.page === pageId) a.classList.add('active');
+  });
+}
+
+// ---- Project Detail ----
+const projects = {
+  kabutomushi: {
+    title: 'KABUTOMUSHI', category: '// Studio Project', year: '2025',
+    type: 'Product Design', tools: 'Fusion 360 · KeyShot · 3D Print',
+    bg: 'linear-gradient(135deg, #1a1a0a 0%, #0f0f08 100%)',
+    problemTitle: 'Designing from Nature',
+    problem: 'Investigate biomimicry as a design methodology — using the structural logic of the Japanese rhinoceros beetle (kabutomushi) as a template for a product that negotiates between organic form and manufactured precision. How do we translate biological intelligence into engineered objects?'
+  },
+  entropy: {
+    title: 'ENTROPY: A CHESS SET', category: '// Studio Project', year: '2025',
+    type: 'Product / Craft', tools: 'Rhino · KeyShot · Lost PLA Cast',
+    bg: 'linear-gradient(135deg, #0a0a1a 0%, #0a0a0f 100%)',
+    problemTitle: 'Material as Narrative',
+    problem: 'Design a chess set that embeds conceptual meaning into its formal logic. The brief asked for objects that communicate beyond their function — where material, form, and system tell a coherent story. Entropy proposes pieces that erode from back row to front, suggesting systemic decay.'
+  },
+  avian: {
+    title: 'The Squat', category: '// Studio Project', year: '2026',
+    type: 'Speculative Design', tools: 'Fusion 360 & Blender · Illustrator · Laser Cutting · Analog Sketching & Rendering',
+    bg: "url('assets/avian-final/dynamic-float-full.jpg') center/cover no-repeat",
+    problemLabel: '01 — Overview',
+    problemTitle: 'Worldbuilding',
+    problem: `<p>A self-directed brief set inside a speculative future where Earth is surviving a post-industrial breakdown. In that world, grackles, through their intelligence and perseverance, have endured alongside humans as one of the few species to adapt. The project asked a single question: if humans and grackles lived in tandem and collaborated to survive this altered landscape, what would a grackle habitat look like, and what would it be built from?</p><p>Grounding the scenario in deliberate worldbuilding surfaced a concrete set of design requirements for the habitat:</p><ul class="detail-list"><li><strong>Grackle preferences</strong><ul><li>Elevated placement for height</li><li>Open sightlines and visibility</li><li>Partially enclosed rather than fully sealed</li><li>Cubby-like nesting pockets</li><li>Support for group nesting</li><li>Neutral, natural color palette</li></ul></li><li><strong>Deployability</strong> across varied contexts and sites</li><li><strong>Versatility</strong><ul><li>Adaptable material strategy</li><li>Flexibility in where and how it is deployed</li></ul></li></ul><div class="desk-scatter"><img class="desk-item" src="assets/avian-worldbuilding/moodboard.png" alt="Worldbuilding moodboard" onclick="openVizLightbox(this)"></div>`,
+    ideationLabel: '02 — Ideation',
+    ideationTitle: 'Sketches & Early Prototyping',
+    ideation: `<p>Ideation began with a series of exploratory sketches mapping out different formal directions, which were then tested and developed through CAD studies and cardboard mock-ups to evaluate proportion, assembly logic, and scale.</p><div class="desk-scatter"><img class="desk-item" src="assets/avian-ideation/IMG_3132.JPG" alt="Cardboard mockup" onclick="openVizLightbox(this)"><img class="desk-item" src="assets/avian-ideation/IMG_3134.JPG" alt="Cardboard mockup" onclick="openVizLightbox(this)"><img class="desk-item" src="assets/avian-ideation/20260330_144557359_iOS.jpg" alt="Prototype study" onclick="openVizLightbox(this)"><img class="desk-item" src="assets/avian-ideation/20260330_144557462_iOS.jpg" alt="Prototype study" onclick="openVizLightbox(this)"><img class="desk-item" src="assets/avian-ideation/IMG_2929.jpeg" alt="Ideation sketch" onclick="openVizLightbox(this)"><img class="desk-item" src="assets/avian-ideation/IMG_2962.jpeg" alt="Ideation sketch" onclick="openVizLightbox(this)"><img class="desk-item" src="assets/avian-ideation/IMG_2971.jpeg" alt="Ideation sketch" onclick="openVizLightbox(this)"><img class="desk-item" src="assets/avian-ideation/dba7b4d1-bb05-47b5-97b2-e481c95b4a0e.PNG" alt="CAD model study" onclick="openVizLightbox(this)"></div>`,
+    developmentLabel: '03 — Development',
+    developmentTitle: 'Refinement & Prototyping',
+    development: `<p>The refinement phase moved into the working material: acrylic sheet, chosen for its behavioral and visual affinity—through heat bending and solvent welding, and once painted—to the sheet metal that would plausibly dominate a post-industrial landscape. The resulting two-part architecture keeps the design legible within its speculative world while remaining genuinely practical: simple to manufacture, fast to assemble, and adaptable across materials and deployment contexts. The nester's surfaces can be drilled to mount, hang, or adhere to nearly any substrate, or it can rest directly on the ground, held in place by its rubber gripping feet.</p><div class="desk-scatter"><img class="desk-item" src="assets/avian-refinement/IMG_3003.jpeg" alt="Acrylic fabrication process" onclick="openVizLightbox(this)"><img class="desk-item" src="assets/avian-refinement/IMG_3006.jpeg" alt="Acrylic fabrication process" onclick="openVizLightbox(this)"><img class="desk-item" src="assets/avian-refinement/IMG_3013.jpeg" alt="Acrylic fabrication process" onclick="openVizLightbox(this)"><img class="desk-item" src="assets/avian-refinement/IMG_3039.jpeg" alt="Refined prototype detail" onclick="openVizLightbox(this)"><img class="desk-item" src="assets/avian-refinement/IMG_3040.jpeg" alt="Refined prototype detail" onclick="openVizLightbox(this)"></div>`,
+    outcomeLabel: '04 — Outcome',
+    outcomeTitle: 'Final',
+    outcome: `<p>The finished habitat resolves every requirement established at the start of the brief, satisfying both the grackles' behavioral preferences and the constraints of the environment it is designed to live within. Iterative prototyping, material investigation, and formal refinement produced an object that is visually cohesive, reliably deployable across a range of sites, and versatile enough to adapt to whatever surface or condition it meets. It stands as a direct, buildable answer to the central question of the project: a proposal for what a grackle habitat might look like, and what it could be built from, in a future where humans and grackles have learned to collaborate.</p><div class="avian-final-grid"><img class="avian-final-img" src="assets/avian-final/dynamic-float-1.jpg" alt="Dynamic float 1" onclick="openVizLightbox(this)"><img class="avian-final-img" src="assets/avian-final/dynamic-float-2.jpg" alt="Dynamic float 2" onclick="openVizLightbox(this)"><img class="avian-final-img" src="assets/avian-final/dynamic-float-full.jpg" alt="Dynamic float full" onclick="openVizLightbox(this)"><img class="avian-final-img" src="assets/avian-final/extend-sp.jpg" alt="Extend" onclick="openVizLightbox(this)"></div>`
+  },
+  amore: {
+    title: 'AMORE', category: '// Studio Project', year: '2024',
+    type: 'Consumer Product', tools: 'Rhino · KeyShot',
+    bg: 'linear-gradient(135deg, #1a0a0a 0%, #0f0808 100%)',
+    problemTitle: 'Technology & Intimacy',
+    problem: 'Explore how technology-mediated products intersect with emotional experience. AMORE investigates the product design language of intimacy — how form, material, and interaction model affect our emotional relationship to objects.'
+  },
+  'form-study': {
+    title: 'FORM STUDY 01', category: '// Formal Exercise', year: '2024',
+    type: 'Formal Study', tools: 'Clay · Fusion 360',
+    bg: 'linear-gradient(135deg, #0a0a1a 0%, #0a0a10 100%)',
+    problemTitle: 'Primitive Volume',
+    problem: 'An investigation into the emotional register of primitive geometric volumes. How does the ratio between flatness and curvature change our affective response to form? This exercise explored the minimal conditions for an object to feel intentional.'
+  },
+  fictional: {
+    title: 'FICTIONAL PROP 01', category: '// Speculative', year: '2024',
+    type: 'Prop Design', tools: 'Fusion 360 · KeyShot · Paint',
+    bg: 'linear-gradient(135deg, #0a1a10 0%, #080f0a 100%)',
+    problemTitle: 'Worldbuilding Through Object',
+    problem: 'Design an artifact from a plausible near-future world. The object must carry enough visual information to imply a broader sociotechnical context — a world the viewer can partially reconstruct from examining the thing alone.'
+  }
+};
+
+function showProjectDetail(projectId) {
+  const proj = projects[projectId];
+  if (!proj) return;
+  document.getElementById('detailTitle').textContent = proj.title;
+  document.getElementById('detailCategory').textContent = proj.category;
+  document.getElementById('detailYear').textContent = proj.year;
+  document.getElementById('detailType').textContent = proj.type;
+  document.getElementById('detailTools').textContent = proj.tools;
+  document.getElementById('detailBg').style.background = proj.bg;
+  document.getElementById('detailProblemTitle').textContent = proj.problemTitle;
+  document.getElementById('detailProblemLabel').textContent = proj.problemLabel || '01 — The Problem';
+  document.getElementById('detailProblem').innerHTML = proj.problem;
+
+  const ideationLabelEl = document.getElementById('detailIdeationLabel');
+  const ideationTitleEl = document.getElementById('detailIdeationTitle');
+  const ideationContentEl = document.getElementById('detailIdeationContent');
+  if (!showProjectDetail._defaultIdeation) {
+    showProjectDetail._defaultIdeation = {
+      label: ideationLabelEl.textContent,
+      title: ideationTitleEl.textContent,
+      html: ideationContentEl.innerHTML
+    };
+  }
+  if (proj.ideation) {
+    ideationLabelEl.textContent = proj.ideationLabel || '02 — Ideation';
+    ideationTitleEl.textContent = proj.ideationTitle || 'Ideation';
+    ideationContentEl.innerHTML = proj.ideation;
+  } else {
+    ideationLabelEl.textContent = showProjectDetail._defaultIdeation.label;
+    ideationTitleEl.textContent = showProjectDetail._defaultIdeation.title;
+    ideationContentEl.innerHTML = showProjectDetail._defaultIdeation.html;
+  }
+
+  const developmentLabelEl = document.getElementById('detailDevelopmentLabel');
+  const developmentTitleEl = document.getElementById('detailDevelopmentTitle');
+  const developmentContentEl = document.getElementById('detailDevelopmentContent');
+  if (!showProjectDetail._defaultDevelopment) {
+    showProjectDetail._defaultDevelopment = {
+      label: developmentLabelEl.textContent,
+      title: developmentTitleEl.textContent,
+      html: developmentContentEl.innerHTML
+    };
+  }
+  if (proj.development) {
+    developmentLabelEl.textContent = proj.developmentLabel || '03 — Development';
+    developmentTitleEl.textContent = proj.developmentTitle || 'Refinement & Prototyping';
+    developmentContentEl.innerHTML = proj.development;
+  } else {
+    developmentLabelEl.textContent = showProjectDetail._defaultDevelopment.label;
+    developmentTitleEl.textContent = showProjectDetail._defaultDevelopment.title;
+    developmentContentEl.innerHTML = showProjectDetail._defaultDevelopment.html;
+  }
+
+  const outcomeLabelEl = document.getElementById('detailOutcomeLabel');
+  const outcomeTitleEl = document.getElementById('detailOutcomeTitle');
+  const outcomeContentEl = document.getElementById('detailOutcomeContent');
+  if (!showProjectDetail._defaultOutcome) {
+    showProjectDetail._defaultOutcome = {
+      label: outcomeLabelEl.textContent,
+      title: outcomeTitleEl.textContent,
+      html: outcomeContentEl.innerHTML
+    };
+  }
+  if (proj.outcome) {
+    outcomeLabelEl.textContent = proj.outcomeLabel || '04 — Outcome';
+    outcomeTitleEl.textContent = proj.outcomeTitle || 'Final';
+    outcomeContentEl.innerHTML = proj.outcome;
+  } else {
+    outcomeLabelEl.textContent = showProjectDetail._defaultOutcome.label;
+    outcomeTitleEl.textContent = showProjectDetail._defaultOutcome.title;
+    outcomeContentEl.innerHTML = showProjectDetail._defaultOutcome.html;
+  }
+
+  showPage('project-detail');
+}
+
+// ---- Fade In on Scroll ----
+function initFadeIns() {
+  const els = document.querySelectorAll('.page.active .fade-in');
+  els.forEach(el => el.classList.remove('visible'));
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }});
+  }, { threshold: 0.15, rootMargin: '0px 0px -8% 0px' });
+  els.forEach(el => observer.observe(el));
+}
+
+// ---- Skill Bar Animation (Resume) ----
+function animateSkillBars() {
+  setTimeout(() => {
+    document.querySelectorAll('.skill-fill').forEach(bar => {
+      bar.style.width = bar.dataset.width || '0%';
+    });
+  }, 300);
+}
+
+// ---- Mobile Menu ----
+function toggleMobileMenu() {
+  const menu = document.getElementById('mobileMenu');
+  menu.classList.toggle('open');
+}
+
+// ---- Init ----
+window.addEventListener('load', () => {
+  initFadeIns();
+  // Animate skill bars if they exist
+  document.querySelectorAll('.skill-fill').forEach(bar => {
+    const target = bar.style.width;
+    bar.style.width = '0';
+    bar.dataset.width = target;
+  });
+});
+
+// Prevent default on nav links
+document.querySelectorAll('nav a[onclick], .nav-links a').forEach(a => {
+  a.addEventListener('click', e => e.preventDefault());
+});
+
+// Contact form — submits to Netlify Forms so an email notification is sent to declanjkuebler@icloud.com
+(function initContactForm() {
+  const form = document.getElementById('contact-form');
+  if (!form) return;
+  const status = document.getElementById('contact-form-status');
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (status) { status.textContent = 'Sending…'; status.style.color = ''; }
+    try {
+      const response = await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(new FormData(form)).toString(),
+      });
+      if (!response.ok) throw new Error('Submission failed');
+      form.reset();
+      if (status) { status.textContent = 'Thanks — your message was sent.'; status.style.color = 'var(--orange)'; }
+    } catch (err) {
+      if (status) { status.textContent = 'Something went wrong. Please email declanjkuebler@icloud.com directly.'; status.style.color = '#ff6b6b'; }
+    }
+  });
+})();
+</script>
+
+<!-- ============================================
+     RESUME PAGE
+     ============================================ -->
+<div class="page" id="page-resume">
+  <div class="page-hero">
+    <p class="page-hero-label">Curriculum Vitae — 2025</p>
+    <h1 class="page-hero-title">RÉSUMÉ</h1>
+    <p class="page-hero-sub">Industrial Design student at the University of Cincinnati DAAP.</p>
+  </div>
+
+  <div class="resume-layout">
+    <div>
+      <a href="assets/declan-kuebler-resume.pdf" class="download-btn" download>
+        <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Download PDF Resume
+      </a>
+
+      <div class="resume-section">
+        <h2 class="resume-section-title">Profile</h2>
+        <p class="resume-entry-desc">Industrial Design student at the University of Cincinnati School of Design, Art, Architecture, and Planning with a strong foundation in visual communication, systems thinking, and process-driven work. Brings experience from fast-paced, customer-facing environments requiring accuracy, efficiency, and accountability. Seeking co-op and internship opportunities to apply design thinking and technical skills in professional settings. Participating in the Professional Practice Program, alternating semesters of classroom study with work in the field of design.</p>
+      </div>
+
+      <div class="resume-section">
+        <h2 class="resume-section-title">Education</h2>
+        <div class="resume-entry">
+          <div class="resume-entry-header">
+            <span class="resume-entry-title">B.S. Industrial Design</span>
+            <span class="resume-entry-date">Expected 2030</span>
+          </div>
+          <p class="resume-entry-sub">University of Cincinnati — DAAP · Cincinnati, OH</p>
+          <p class="resume-entry-desc">College of Design, Architecture, Art, and Planning. Professional Practice Program participant — alternating academic semesters with full-time, paid co-op rotations.</p>
+        </div>
+        <div class="resume-entry">
+          <div class="resume-entry-header">
+            <span class="resume-entry-title">High School Diploma</span>
+            <span class="resume-entry-date">2025</span>
+          </div>
+          <p class="resume-entry-sub">Elyria Catholic High School · Elyria, OH</p>
+          <p class="resume-entry-desc">Visual arts coursework emphasizing composition, craftsmanship, and critique-based improvement.</p>
+        </div>
+      </div>
+
+      <div class="resume-section">
+        <h2 class="resume-section-title">Experience</h2>
+        <div class="resume-entry">
+          <div class="resume-entry-header">
+            <span class="resume-entry-title">Dog Care Associate</span>
+            <span class="resume-entry-date">Mar 2025 – Aug 2025</span>
+          </div>
+          <p class="resume-entry-sub">Little River Pet Resort · Columbia Station, OH</p>
+          <p class="resume-entry-desc">Dog daycare and boarding facility. Managed daily care routines for multiple animals, balancing attention to detail with time-sensitive tasks. Observed and assessed animal behavior to proactively prevent safety incidents and ensure controlled environments. Maintained clean, organized workspaces aligned with health, safety, and sanitation standards. Collaborated with team members to execute individualized care plans accurately.</p>
+        </div>
+        <div class="resume-entry">
+          <div class="resume-entry-header">
+            <span class="resume-entry-title">Car Wash Associate</span>
+            <span class="resume-entry-date">Mar 2024 – Aug 2024</span>
+          </div>
+          <p class="resume-entry-sub">Blue Falls Car Wash · Westlake, OH</p>
+          <p class="resume-entry-desc">Automated vehicle wash facility. Delivered consistent, high-quality customer interactions by guiding guests through automated service systems and purchase options. Executed daily operational checklists, including equipment inspection, cleaning protocols, and safety procedures. Maintained professional standards across all public-facing areas, reinforcing brand appearance and customer trust. Operated efficiently in a high-volume environment, adapting quickly to workflow changes and peak demand.</p>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="resume-section">
+        <h2 class="resume-section-title">Skills &amp; Tools</h2>
+        <div class="tools-grid">
+          <div class="tool-tag">Adobe Illustrator</div>
+          <div class="tool-tag">Adobe Photoshop</div>
+          <div class="tool-tag">Adobe InDesign</div>
+          <div class="tool-tag">Procreate</div>
+          <div class="tool-tag">Fusion 360</div>
+          <div class="tool-tag">SolidWorks</div>
+          <div class="tool-tag">Blender</div>
+          <div class="tool-tag">Digital &amp; Analog Visualization</div>
+          <div class="tool-tag">Typography</div>
+          <div class="tool-tag">Iterative Design Process</div>
+          <div class="tool-tag">Prototyping</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-left">
+      <span class="footer-name">DECLAN KUEBLER</span>
+      <span class="footer-copy">© 2025 All rights reserved</span>
+    </div>
+    <div class="footer-mid"><a href="mailto:declanjkuebler@icloud.com" class="footer-email">declanjkuebler@icloud.com</a></div>
+    <div class="footer-socials">
+      <a href="https://www.linkedin.com/in/declankuebler" target="_blank" class="footer-social"><svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+      <a href="https://www.instagram.com/dunce_k18/" target="_blank" class="footer-social"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+    </div>
+  </footer>
+</div>
+
+</body>
+</html>
